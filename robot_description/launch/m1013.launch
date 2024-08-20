@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+
+<launch>
+    <arg name="model"   default="m1013"/>
+    <arg name="ns"      default="dsr01"/>
+    <arg name="rviz"    default="True"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro '$(find robot_description)/xacro/$(arg model).urdf.xacro' '--inorder' 'namespace:=$(arg ns)'"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" respawn="false">
+        <remap from="/joint_states" to="$(arg ns)/joint_states" />
+    </node>
+
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+    <!-- Send joint values -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+        <param name="/use_gui" value="false"/>
+        <remap from="/joint_states" to="$(arg ns)/joint_states" />
+    </node>
+
+    <!-- Show in Rviz -->
+    <group if="$(eval arg('rviz') == True)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot_description)/rviz/default.rviz"/>
+    </group>
+</launch>

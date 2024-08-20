@@ -1,0 +1,86 @@
+#Parameters for evaluate_state function
+insert_depth_target:      0.001                 # unit = [m] offtset in z-direction for defining target position measured from screw inertial coodinate system
+force_threshold:          2                     # unit = [N] total force treshold for achieving force compliant behavior 
+terminal_x_offset:        0.002                 # unit = [m] x-offset to define terminal state
+terminal_y_offset:        0.002                 # unit = [m] y-offset to define terminal state
+terminal_z_offset:        0.0008                # unit 0 [m] z-offset to define terminal state
+lambda1:                  800                   # unit = [-] coefficient for euclidean reward function
+lambda2:                  0                     # unit = [-] coefficient for x-y distance reward function
+lambda3:                  0                     # unit = [-] coefficient for z-distance reward function
+lambda4:                  0                     # unit = [-] coefficient for force compliance reward function
+lambda5:                  1                     # unit = [-] coefficient for success reward
+success_reward:           500                   # unit = [-] reward given for reaching terminal state
+
+#Parameters for action and observation spaces
+action_low_bound:         [-1.0, -1.0, -1.0]    # unit = [-] boundaries for action space
+action_high_bound:        [1.0, 1.0, 1.0]       # unit = [-] boundaries for action space
+observation_low_bound:    [-100, -100, -100, -100, -100, -100]    # unit = [-] boundaries for observation space
+observation_high_bound:   [100, 100, 100, 100, 100, 100]          # unit = [-] boundaries for observation space
+
+#Parameters to delete models
+model_1:                  'lamp'                # unit = [-] names of models in simulation   
+model_2:                  'lamp1'               # unit = [-] names of models in simulation
+model_3:                  'screw'               # unit = [-] names of models in simulation
+        
+#Coordinates for origin of search frame 
+x0_search:                0.8                   # unit = [m] origin of search frame in world frame of simulation
+y0_search:                0.0                   # unit = [m] origin of search frame in world frame of simulation
+z0_search:                0.052                 # unit = [m] origin of search frame in world frame of simulation
+
+#Parameters to spawn models
+spawn_lower_lim:          -0.02                 # unit = [m] lower limit for search area measured from search frame origin x and y direction
+spawn_upper_lim:          0.02                  # unit = [m] upper limit for search area measured from search frame origin x and y direction
+model_roll:               0                     # unit = [rad] orientation of models when spawned in simulation
+model_pitch:              0                     # unit = [rad] orientation of models when spawned in simulation
+model_yaw:                0                     # unit = [rad] orientation of models when spawned in simulation
+spawn_std_dev_x:          0.00                  # unit = [m] standard deviation of gaussian distruibution for spawning the models 
+spawn_std_dev_y:          0.00                  # unit = [m] standard deviation of gaussian distruibution for spawning the models
+
+#Parameters to configure cartesian impedance controller
+xs:                       700.0                 # unit = [N/m] cartesian stiffness of robot arm in x direction based on tcp frame
+ys:                       700.0                 # unit = [N/m] cartesian stiffness of robot arm in y direction based on tcp frame
+zs:                       700.0                 # unit = [N/m] cartesian stiffness of robot arm in z direction based on tcp frame
+xst:                      50.0                  # unit = [Nm/rad] cartesian stiffness of robot arm around x axis based on tcp frame
+yst:                      50.0                  # unit = [Nm/rad] cartesian stiffness of robot arm around y axis based on tcp frame
+zst:                      50.0                  # unit = [Nm/rad] cartesian stiffness of robot arm around z axis based on tcp frame
+xd:                       1.0                   # unit = [-] cartesian damping factor in x direction based on tcp frame
+yd:                       1.0                   # unit = [-] cartesian damping factor in y direction based on tcp frame
+zd:                       1.0                   # unit = [-] cartesian damping factor in z direction based on tcp frame
+xdt:                      1.0                   # unit = [-] cartesian damping factor for rotation around x axis based on tcp frame
+ydt:                      1.0                   # unit = [-] cartesian damping factor for rotation around y axis based on tcp frame
+zdt:                      1.0                   # unit = [-] cartesian damping factor for rotation around z axis based on tcp frame
+nullspace_stiff:          15.0                  # unit = [N/m] nullspace stiffness for nullspace movements 
+nullspace_damp:           1.0                   # unit = [-] nullspace damping factor for nullspace movements
+wrench_fx:                -7.5                  # unit = [N] wrench apllied at tcp
+wrench_fy:                -1.2                  # unit = [N] wrench apllied at tcp
+wrench_fz:                0                     # unit = [N] wrench apllied at tcp
+wrench_tx:                0                     # unit = [Nm] wrench apllied at tcp
+wrench_ty:                -2.5                  # unit = [Nm] wrench apllied at tcp
+wrench_tz:                0                     # unit = [Nm] wrench apllied at tcp
+
+#parameters to perform action
+action_scale:             0.002                 # unit = [m] scale to rescale actions from normalized space to unnormalized action space
+scope_boundary:           1                     # unit = [m] limit for search space of robot if passsed episode is truncated
+delta_t_obs:              0.5                   # unit = [sec] delay between perform_action and get_observation functions
+
+#PPO Agent parameters
+log_dir:                  "/home/florian/catkin_ws/src/drl_agent/training_results/"     # directory where logs are saved 
+save_dir:                 "/home/florian/Documents/Trained_Agents/agent_1"             # directory where trained agents are saved 
+#save_dir:                 "/home/cobotrees/documents/trained_agents/agent"             # directory where trained agents are saved (for VM in Smart Automation Lab)
+policy:                   "MlpPolicy"                                                   # NN used to aproximate the value function and policy
+policy_net_size:          [64, 64]                                                      # size of policy network       
+vf_net_size:              [64, 64]                                                      # size of value function network
+activation_fnc:           "TanH"                                                          # activation function for networks (Tanh or ReLU)
+learning_rate:            0.0003                                                        # leanring rate of optimizer for networkd
+n_steps:                  1024                                                          # number of steps to run each environment per update
+batch_size:               64                                                            # minibatch size 
+n_epochs:                 10                                                            # number of episodes when optimizing the surrogate loss
+gamma:                    0.99                                                          # discount factor for cumulative rewards
+gae_lambda:               0.95                                                          # factor for trade-off of bias vs variance for Generalized Advantage Estimator
+clip_range:               0.2                                                           # clipping parameter from 1 to 0            
+ent_coef:                 0.001                                                         # entropy coefficient for the loss calculation
+vf_coef:                  0.5                                                           # value function coefficient for the loss calculation
+verbose:                  1                                                             # 0 = no outputs 1 = info messages 2 = debug messages
+total_timesteps:          204800                                                        # total steps to learn on 
+tb_log_name:              "PPO_Agent"                                                   # name of the run for tensorboard logging
+progress_bar:             True                                                          # whether showing a progress bar

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="ns" default="dsr01"/>
+  <arg name="model" default="m1013"/>
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="0"/>
+  <arg name="roll" default="0"/>
+  <arg name="pitch" default="0"/>
+  <arg name="yaw" default="0"/>
+  <arg name="rviz" default="false"/>
+  <arg name="world_file" default="$(find robot_sim)/worlds/zero_gravity.world"/>
+
+  <rosparam command="load" file="$(find drl_agent)/config/main_config.yaml"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name"      value="$(arg world_file)"/>
+    <arg name="paused"          value="false"/>
+    <arg name="use_sim_time"    value="true"/>
+    <arg name="gui"             value="true"/>
+    <arg name="headless"        value="false" />
+    <arg name="debug"           value="false" />
+    <arg name="verbose"         value="true" />
+  </include>
+
+  <!-- Generate the model for gazebo and publish the robots joint states. -->
+  <include file="$(find robot_description)/launch/m1013.launch">
+    <arg name="ns"         value="$(arg ns)"/>
+    <arg name="model"      value="$(arg model)"/>
+    <arg name="rviz"       value="$(arg rviz)"/>
+  </include>
+
+  <!-- Start of robot controllers -->
+       <include file="$(find robot_control)/launch/cart_impedance_controller.launch"> </include> 
+       <!--<include file="$(find robot_control)/launch/cart_compliance_controller.launch"> </include> -->
+
+  <!--Usage: static_transform_publisher x y z yaw pitch roll frame_id child_frame_id  period (milliseconds) -->
+  <node pkg="tf" type="static_transform_publisher" name="world_tf" ns="$(arg ns)" args="$(arg x) $(arg y) $(arg z) $(arg yaw) 0 0 map /world 100">
+    <param name="tf_prefix" value="$(arg ns)"/>
+  </node>
+  
+  <!-- Spawn the model into gazebo. -->
+  <node name="spawn_create_model" pkg="gazebo_ros" type="spawn_model" ns="$(arg ns)" args="-x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -urdf -param /robot_description -model $(arg ns)"/>
+
+
+</launch>

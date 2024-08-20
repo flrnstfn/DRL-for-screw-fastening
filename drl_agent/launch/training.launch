@@ -1,0 +1,6 @@
+<launch>
+
+    <node pkg="drl_agent" type="agent_training.py" name="screwfastening_training" output="screen" />
+
+</launch>
+

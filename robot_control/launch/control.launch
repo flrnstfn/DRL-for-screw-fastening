@@ -1,0 +1,14 @@
+<launch>
+
+    <rosparam file="$(find robot_control)/config/position_control.yaml" command="load" ns="dsr01"/>
+    <rosparam file="$(find robot_control)/config/cartesian_impedance_controller.yaml" command="load" ns="dsr01"/>
+
+
+    <node name="controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" />
+  
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="dsr01" args="joint1_position_controller joint2_position_controller joint3_position_controller joint4_position_controller joint5_position_controller joint6_position_controller joint_state_controller"/>
+    
+    <node pkg="controller_manager" type="spawner" name="load_my_controller" args="CartesianImpedance_trajectory_controller --stopped" respawn="false" output="screen" ns="dsr01"/>
+
+</launch>

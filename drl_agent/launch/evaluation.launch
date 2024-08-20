@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg="drl_agent" type="agent_evaluation.py" name="agent_evaluation" output="screen" />
+
+</launch>

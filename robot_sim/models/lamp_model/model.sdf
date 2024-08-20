@@ -1,0 +1,54 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+    <model name="lamp">
+        <pose>0 0 0 0 0 0</pose>
+        <static>true</static>
+        <link name="lamp_model">
+            <inertial>
+                <mass>0.5</mass>
+                <inertia>
+                    <ixx>0.01</ixx>
+                    <ixy>0.01</ixy>
+                    <ixz>0.01</ixz>
+                    <iyy>0.01</iyy>
+                    <iyz>0.01</iyz>
+                    <izz>0.01</izz>
+                </inertia>
+            </inertial>
+            <collision name="collision">
+                <pose> 0 0 0 0 0 0 </pose>
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>0.1</mu>
+                            <mu2>0.1</mu2>
+                            <slip1>0.1</slip1>
+                            <slip2>0.1</slip2>
+                        </ode>
+                    </friction>
+                     <contact>
+                        <ode>
+                            <kp>100000000</kp>
+                            <kd>100</kd>
+                        </ode>
+                    </contact>
+                </surface>
+                <geometry>
+                    <mesh>
+                        <uri>model://lamp_model/meshes/workpiece_meshed.stl</uri>
+                        <scale>0.001 0.001 0.001</scale>
+                    </mesh>
+                </geometry>
+            </collision>
+            <visual name="visual">
+                <pose> 0 0 0 0 0 0 </pose>
+                <geometry>
+                   <mesh>
+                        <uri>model://lamp_model/meshes/workpiece_meshed.stl</uri>
+                        <scale>0.001 0.001 0.001</scale>
+                   </mesh>
+                </geometry>
+            </visual> 
+        </link>
+    </model>
+</sdf>
